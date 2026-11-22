@@ -8,26 +8,15 @@ A tiny stack VM for make.fun's tiny-stack-vm-01: `node main.ts` runs every
 `/input/<id>/program.bin` on the kit ISA and writes `/output/<id>/stdout.bin`
 and `/output/<id>/exit.txt`. See the kit's `generator/subject/ISA.md`.
 
-## How it works
-
-![A tiny stack VM — one example](stack-diagram.png)
-
-Values live on a stack: `PUSH` adds one, `ADD` pops two and pushes the
-sum, and the program halts with the answer on top. The interpreter is
-hand-written to match the reference VM instruction for instruction —
-40/40 practice programs produce byte-identical output, and 21 hand-made
-edge cases match too.
-
-## Validation
-
-The kit's sealed scorer (`grade-local`) gives the **maximum score
-1.000000** — 40,000/40,000 checks. Node, standard library only, no
-network. Deterministic: two runs write the same bytes.
+Values live on a stack: `PUSH` adds one, `ADD` pops two and pushes the sum.
+Hand-written to match the reference VM instruction for instruction — 40/40
+practice programs byte-identical, 21 hand-made edge cases match, and the
+kit's sealed scorer gives the **maximum 1.000000** (40,000/40,000 checks).
+Node, standard library only, no network, deterministic.
 
 ## Files
 
-- `main.ts` — the interpreter (3,767 bytes, hand-written)
-- `stack-diagram.png` — the stack, drawn
+- `main.ts` — the interpreter (hand-written)
 - `README.md` — this file
 - `LICENSE` — MIT
 - `.makefun/owner.json` — the entry wallet
