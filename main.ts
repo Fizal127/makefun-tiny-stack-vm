@@ -1,6 +1,17 @@
-// Tiny stack VM for make.fun tiny-stack-vm-01: runs every /input/<id> program
-// on the kit ISA (generator/subject/ISA.md) and writes stdout.bin/exit.txt.
-// Hand-written compact interpreter; semantics mirror the reference vm.mjs.
+// Tiny stack VM for make.fun tiny-stack-vm-01.
+// Runs every /input/<id>/program.bin on the kit ISA
+// (program/generator/subject/ISA.md) with /input/<id>/input.bin as its input
+// bytes, and writes /output/<id>/stdout.bin (exactly the bytes the program
+// printed) and /output/<id>/exit.txt (the exit code, 0-255).
+// Machine: 32-bit two's-complement values on a 256-slot data stack (D), a
+// 64-deep call stack (C), 256 words of memory (M), at most 1,000,000 steps
+// and 65,536 output bytes; anything out of bounds is one of traps 2-11, and
+// output written before a trap is kept.
+// Dispatch: one fetch-decode-execute loop. K(b) is a static table of
+// [immediate bytes, pops, pushes] per opcode, so stack-depth and truncation
+// checks happen once before each instruction; the switch below then executes
+// the opcode, with arithmetic wrapped to int32 (Math.imul, |0) to mirror the
+// reference vm.mjs. Hand-written, Node stdlib only; no dependencies.
 import {mkdirSync,readdirSync,readFileSync,writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 const I=process.env.MAKEFUN_INPUT_DIR??'/input',O=process.env.MAKEFUN_OUTPUT_DIR??'/output';
